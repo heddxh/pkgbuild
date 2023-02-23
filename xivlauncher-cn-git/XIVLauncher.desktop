@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=XIVLauncher.Core-CN
+Comment=Custom launcher for FFXIV CN
+Exec=XIVLauncher.Core
+Icon=xivlauncher
+Terminal=false
+Type=Application
+Categories=Game;
+StartupWMClass=XIVLauncher.Core
