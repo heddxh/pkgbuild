@@ -1,0 +1,64 @@
+# Maintainer: Heddxh <g311571057@gmail.com>
+pkgname=xivlauncher-cn-git
+pkgver=r245.178bd80
+pkgrel=1
+pkgdesc="Custom launcher for FFXIV CN"
+arch=('x86_64')
+url='https://github.com/ottercorp/FFXIVQuickLauncher/'
+license=('GPL3')
+depends=(
+    'aria2'
+    'sdl2' 'lib32-sdl2'
+    'libsecret'
+    'attr'                  'lib32-attr'
+    'fontconfig'            'lib32-fontconfig'
+    'lcms2'                 'lib32-lcms2'
+    'libxml2'               'lib32-libxml2'
+    'libxcursor'            'lib32-libxcursor'
+    'libxrandr'             'lib32-libxrandr'
+    'libxdamage'            'lib32-libxdamage'
+    'libxi'                 'lib32-libxi'
+    'gettext'               'lib32-gettext'
+    'freetype2'             'lib32-freetype2'
+    'glu'                   'lib32-glu'
+    'libsm'                 'lib32-libsm'
+    'gcc-libs'              'lib32-gcc-libs'
+    'libpcap'               'lib32-libpcap'
+    'faudio'                'lib32-faudio'
+    'desktop-file-utils'    'jxrlib'
+)
+makedepends=('dotnet-sdk>=6' 'python-yaml' 'git')
+options=('!strip')
+conflicts=("xivlauncher")
+source=(
+    "XIVLauncher.Core::git+https://github.com/ottercorp/XIVLauncher.Core.git"
+    "XIVLauncher.desktop"
+)
+sha256sums=('SKIP'
+            '4f50cefb3501127d110049a9e973cfd4b9b4c8fc347b6973f51f8da9afa60a66')
+
+pkgver() {
+  cd "${srcdir}/XIVLauncher.Core"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short=7 HEAD)"
+}
+
+prepare() {
+    cd "${srcdir}/XIVLauncher.Core"
+    git submodule update --init --recursive
+}
+
+build() {
+    mkdir -p "${srcdir}/build"
+    mkdir -p "${srcdir}/build/Resources"
+    cd "${srcdir}/XIVLauncher.Core/src/XIVLauncher.Core/"
+    dotnet publish -r linux-x64 --sc -o "${srcdir}/build" --configuration Release -p:DefineConstants=WINE_XIV_ARCH_LINUX
+}
+
+package() {
+    install -d "${pkgdir}/usr/bin/"
+    install -d "${pkgdir}/opt/XIVLauncher/"
+    install -D -m644 "${srcdir}/XIVLauncher.desktop" "${pkgdir}/usr/share/applications/XIVLauncher.desktop"
+    install -D -m644 "${srcdir}/XIVLauncher.Core/misc/linux_distrib/512.png" "${pkgdir}/usr/share/icons/hicolor/512x512/apps/xivlauncher.png"
+    cp -r "${srcdir}/build/." "${pkgdir}/opt/XIVLauncher/"
+    ln -s ../../opt/XIVLauncher/XIVLauncher.Core "${pkgdir}/usr/bin/XIVLauncher.Core"
+}

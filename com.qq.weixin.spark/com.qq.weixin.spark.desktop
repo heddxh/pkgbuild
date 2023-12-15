@@ -1,0 +1,21 @@
+[Desktop Entry]
+Categories=InstantMessaging;Network;
+Comment[zh_CN]=WeiXin Client on Deepin Wine6
+Comment=WeiXin Client on Deepin Wine6
+Encoding=UTF-8
+Exec=/opt/apps/com.qq.weixin.spark/files/run.sh -f %f
+GenericName[zh_CN]=
+GenericName=
+Icon=wechat
+MimeType=
+Name[zh_CN]=微信
+Name=微信
+Path=
+StartupNotify=true
+StartupWMClass=wechat.exe
+Terminal=false
+TerminalOptions=
+Type=Application
+X-Created-By=sgb76
+X-KDE-SubstituteUID=false
+X-KDE-Username=
